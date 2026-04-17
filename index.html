@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chester Pizza</title>
+  <style>
+    :root {
+      --bg: #f7f7f5;
+      --surface: #ffffff;
+      --surface-2: #f1f3f4;
+      --text: #161616;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --brand: #e63946;
+      --brand-dark: #c62834;
+      --accent: #111827;
+      --success: #11845b;
+      --shadow: 0 18px 45px rgba(0,0,0,0.08);
+      --radius: 22px;
+      --max: 1200px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea, select { font: inherit; }
+
+    .container {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(247,247,245,0.88);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(229,231,235,0.85);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 14px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      font-size: 1.15rem;
+    }
+
+    .brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--brand), #ff6b35);
+      color: white;
+      display: grid;
+      place-items: center;
+      box-shadow: var(--shadow);
+      font-size: 1.2rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 22px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 12px 18px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: 0.22s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+
+    .btn-primary {
+      background: var(--brand);
+      color: white;
+      box-shadow: 0 12px 24px rgba(230,57,70,0.22);
+    }
+
+    .btn-primary:hover { background: var(--brand-dark); }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--accent);
+      border: 1px solid var(--line);
+    }
+
+    .cart-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 999px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      font-weight: 700;
+    }
+
+    .hero {
+      padding: 36px 0 26px;
+    }
+
+    .hero-wrap {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 30px;
+      align-items: center;
+      background: linear-gradient(135deg, #ffffff, #f4f5f6);
+      border: 1px solid #eceef0;
+      border-radius: 34px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-content { padding: 54px; }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      background: #fff0f1;
+      color: var(--brand);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    h1, h2, h3, h4, p { margin-top: 0; }
+
+    h1 {
+      font-size: clamp(2.6rem, 5vw, 4.7rem);
+      line-height: 0.95;
+      letter-spacing: -0.06em;
+      margin-bottom: 18px;
+    }
+
+    .hero-copy {
+      color: var(--muted);
+      font-size: 1.08rem;
+      max-width: 54ch;
+      margin-bottom: 28px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 26px;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      padding: 14px 16px;
+      border-radius: 18px;
+      min-width: 140px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.2rem;
+      margin-bottom: 4px;
+    }
+
+    .hero-image { min-height: 100%; position: relative; }
+
+    .hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      min-height: 540px;
+    }
+
+    .hero-card {
+      position: absolute;
+      left: 22px;
+      bottom: 22px;
+      right: 22px;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.8);
+      border-radius: 22px;
+      padding: 18px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card small,
+    .section-copy,
+    .muted,
+    .contact-card p,
+    .footer p,
+    .menu-meta,
+    .checkout-note,
+    .contact-detail { color: var(--muted); }
+
+    section { padding: 34px 0; }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      letter-spacing: -0.05em;
+      margin-bottom: 8px;
+    }
+
+    .badge {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .feature-grid,
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .feature-card,
+    .contact-card,
+    .checkout-card,
+    .menu-card,
+    .cart-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .feature-card,
+    .contact-card { padding: 24px; }
+
+    .feature-icon {
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: var(--surface-2);
+      font-size: 1.4rem;
+      margin-bottom: 16px;
+    }
+
+    .menu-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 0.65fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .menu-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .category-tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      padding: 11px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      cursor: pointer;
+      font-weight: 700;
+      background: var(--surface);
+      color: var(--accent);
+      transition: 0.2s ease;
+    }
+
+    .tab:hover { transform: translateY(-1px); }
+
+    .tab.active {
+      background: var(--brand);
+      color: #fff;
+      border-color: var(--brand);
+      box-shadow: 0 12px 24px rgba(230,57,70,0.18);
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .menu-card { overflow: hidden; }
+
+    .menu-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      background: #fff;
+    }
+
+    .menu-body { padding: 18px; }
+
+    .menu-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: start;
+      margin-bottom: 10px;
+    }
+
+    .menu-top h3 {
+      margin-bottom: 6px;
+      font-size: 1.18rem;
+    }
+
+    .price {
+      font-weight: 800;
+      font-size: 1.08rem;
+      white-space: nowrap;
+    }
+
+    .menu-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 14px 0 18px;
+    }
+
+    .tag {
+      background: var(--surface-2);
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .menu-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .rating { font-weight: 700; color: #b45309; }
+
+    .size-row {
+      display: flex;
+      gap: 8px;
+      margin: 10px 0 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .size-select {
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      font-weight: 600;
+      background: #fff;
+    }
+
+    .cart-card {
+      position: sticky;
+      top: 92px;
+      padding: 20px;
+    }
+
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .cart-items {
+      display: grid;
+      gap: 12px;
+      margin: 18px 0;
+      max-height: 340px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .cart-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      background: var(--surface-2);
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .cart-item h4 {
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .qty-controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: white;
+      margin-top: 8px;
+    }
+
+    .qty-btn {
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 800;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+    }
+
+    .qty-btn:hover { background: var(--surface-2); }
+
+    .empty-state {
+      padding: 22px;
+      border: 1px dashed var(--line);
+      border-radius: 18px;
+      text-align: center;
+      color: var(--muted);
+      background: #fcfcfc;
+    }
+
+    .summary-row,
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 0;
+    }
+
+    .summary-total {
+      font-size: 1.08rem;
+      font-weight: 800;
+      border-top: 1px solid var(--line);
+      margin-top: 8px;
+      padding-top: 14px;
+    }
+
+    .checkout-wrap {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .checkout-card { padding: 24px; }
+
+    .checkout-list {
+      display: grid;
+      gap: 12px;
+      margin: 16px 0 22px;
+    }
+
+    .checkout-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      background: var(--surface-2);
+      border-radius: 16px;
+      padding: 12px 14px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .field.full { grid-column: 1 / -1; }
+
+    label {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    input, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px 15px;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #f59aa1;
+      box-shadow: 0 0 0 4px rgba(230,57,70,0.08);
+    }
+
+    textarea { min-height: 120px; resize: vertical; }
+
+    .checkout-success {
+      display: none;
+      margin-top: 16px;
+      background: #edf9f4;
+      color: var(--success);
+      border: 1px solid #bde5d1;
+      padding: 16px;
+      border-radius: 16px;
+      font-weight: 700;
+    }
+
+    .contact-card iframe {
+      width: 100%;
+      height: 240px;
+      border: 0;
+      border-radius: 18px;
+      margin-top: 16px;
+    }
+
+    .contact-detail { margin-bottom: 8px; }
+
+    .footer { padding: 26px 0 42px; }
+
+    .footer-card {
+      background: #101214;
+      color: white;
+      border-radius: 30px;
+      padding: 28px;
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .footer p { color: rgba(255,255,255,0.68); }
+
+    .mini-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      color: rgba(255,255,255,0.85);
+      font-weight: 600;
+    }
+
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      background: #111827;
+      color: white;
+      padding: 14px 18px;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: 0.25s ease;
+      z-index: 1200;
+      font-weight: 700;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 1024px) {
+      .hero-wrap,
+      .menu-layout,
+      .checkout-wrap,
+      .feature-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .menu-grid { grid-template-columns: 1fr 1fr; }
+      .hero-content { padding: 34px; }
+      .cart-card { position: static; }
+    }
+
+    @media (max-width: 760px) {
+      .nav { flex-wrap: wrap; }
+      .nav-links {
+        order: 3;
+        width: 100%;
+        overflow: auto;
+        padding-bottom: 2px;
+      }
+
+      .menu-grid,
+      .form-grid { grid-template-columns: 1fr; }
+
+      .hero-card,
+      .hero-stats,
+      .section-head,
+      .footer-card,
+      .menu-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      h1 { line-height: 1; }
+      .hero-image img { min-height: 360px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a href="#home" class="brand">
+        <span class="brand-badge">🍕</span>
+        <span>Chester Pizza</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#menu">Menu</a>
+        <a href="#contact">Contact</a>
+        <a href="#checkout">Checkout</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="btn btn-secondary" href="#menu">See Menu</a>
+        <a class="cart-pill" href="#checkout">🛒 <span id="cart-count">0 items</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="container hero-wrap">
+        <div class="hero-content">
+          <div class="eyebrow">Fresh slices. Fast delivery.</div>
+          <h1>Modern pizza made for every craving.</h1>
+          <p class="hero-copy">Chester Pizza brings together bold flavors, clean ingredients, and an easy online ordering experience. Pick your favorites, add them to cart, and check out in seconds.</p>
+          <div class="hero-actions">
+            <a href="#menu" class="btn btn-primary">Order now</a>
+            <a href="#contact" class="btn btn-secondary">Visit us</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat"><strong>15 min</strong><span class="muted">Average pickup prep</span></div>
+            <div class="stat"><strong>4.9/5</strong><span class="muted">Loved by locals</span></div>
+            <div class="stat"><strong>7 days</strong><span class="muted">Open every day</span></div>
+          </div>
+        </div>
+        <div class="hero-image">
+          <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1200&q=80" alt="Fresh pizza on a table" />
+          <div class="hero-card">
+            <div><strong>Today’s favorite</strong><br /><small>Classic Pepperoni with extra mozzarella</small></div>
+            <div><strong>From £13.90</strong><br /><small>Ready for pickup or delivery</small></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Built for quick orders</h2>
+            <p class="section-copy">A modern pizza experience designed to turn hungry visitors into paying customers.</p>
+          </div>
+          <div class="badge">Simple, fast, mobile-friendly</div>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card"><div class="feature-icon">⚡</div><h3>Fast online ordering</h3><p>Customers can browse pizzas, sides, and drinks, add them to cart, and head straight to checkout without friction.</p></article>
+          <article class="feature-card"><div class="feature-icon">🥗</div><h3>Options for everyone</h3><p>From classic pepperoni to sides and chilled drinks, the menu works for families, students, workers, and visitors.</p></article>
+          <article class="feature-card"><div class="feature-icon">📍</div><h3>Pickup or delivery feel</h3><p>The site encourages local orders while keeping contact details and location easy to find.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="menu">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Menu</h2>
+            <p class="section-copy">Browse pizzas, sides, and drinks, then add your favorites to cart.</p>
+          </div>
+          <div class="badge">3 categories</div>
+        </div>
+
+        <div class="menu-layout">
+          <div>
+            <div class="menu-toolbar">
+              <div class="category-tabs">
+                <button class="tab active" data-category="pizza">Pizza</button>
+                <button class="tab" data-category="sides">Sides</button>
+                <button class="tab" data-category="drinks">Drinks</button>
+              </div>
+              <div class="badge" id="category-label">Showing: Pizza</div>
+            </div>
+            <div class="menu-grid" id="menu-grid"></div>
+          </div>
+
+          <aside class="cart-card">
+            <div class="cart-header">
+              <h3>Your cart</h3>
+              <span class="badge" id="cart-badge">0 items</span>
+            </div>
+            <p class="menu-meta">Your selected items will appear here and carry into checkout automatically.</p>
+            <div class="cart-items" id="cart-items"></div>
+            <div class="summary-row"><span>Subtotal</span><strong id="subtotal">£0.00</strong></div>
+            <div class="summary-row"><span>Delivery</span><strong>£2.50</strong></div>
+            <div class="summary-total"><span>Total</span><span id="total">£2.50</span></div>
+            <div style="display:grid; gap:10px; margin-top:16px;">
+              <a href="#checkout" class="btn btn-primary" style="text-align:center;">Go to checkout</a>
+              <button class="btn btn-secondary" id="clear-cart">Clear cart</button>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section id="checkout">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Checkout</h2>
+            <p class="section-copy">Review your order and place it in a few simple steps.</p>
+          </div>
+          <div class="badge">Secure order form UI</div>
+        </div>
+
+        <div class="checkout-wrap">
+          <div class="checkout-card">
+            <h3>Order summary</h3>
+            <p class="checkout-note">Everything you add in the menu updates here automatically.</p>
+            <div class="checkout-list" id="checkout-list"></div>
+            <div class="summary-row"><span>Subtotal</span><strong id="checkout-subtotal">£0.00</strong></div>
+            <div class="summary-row"><span>Delivery</span><strong>£2.50</strong></div>
+            <div class="summary-total"><span>Order total</span><span id="checkout-total">£2.50</span></div>
+          </div>
+
+          <div class="checkout-card">
+            <h3>Customer details</h3>
+            <form id="checkout-form">
+              <div class="form-grid">
+                <div class="field"><label for="name">Full name</label><input id="name" name="name" type="text" placeholder="Alex Morgan" required /></div>
+                <div class="field"><label for="phone">Phone number</label><input id="phone" name="phone" type="tel" placeholder="07123 456789" required /></div>
+                <div class="field full"><label for="email">Email address</label><input id="email" name="email" type="email" placeholder="hello@example.com" required /></div>
+                <div class="field full"><label for="address">Delivery address</label><input id="address" name="address" type="text" placeholder="12 High Street, Chester" required /></div>
+                <div class="field full"><label for="notes">Order notes</label><textarea id="notes" name="notes" placeholder="Extra napkins, no onions, ring the bell..."></textarea></div>
+              </div>
+              <button class="btn btn-primary" type="submit" style="width:100%;">Place order</button>
+              <div class="checkout-success" id="checkout-success"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Contact Chester Pizza</h2>
+            <p class="section-copy">Keep your shop easy to reach for new and repeat customers.</p>
+          </div>
+          <div class="badge">Open daily</div>
+        </div>
+        <div class="contact-grid">
+          <article class="contact-card">
+            <h3>Visit the shop</h3>
+            <p class="contact-detail">24 Pepper Street, Chester, UK</p>
+            <p class="contact-detail">Mon–Sun: 11:00 AM – 11:00 PM</p>
+            <p class="contact-detail">Phone: 01244 555 980</p>
+            <iframe loading="lazy" src="https://www.google.com/maps?q=Chester%20UK&z=13&output=embed" title="Map showing Chester"></iframe>
+          </article>
+          <article class="contact-card">
+            <h3>Why customers order again</h3>
+            <p>Clean layout, strong product images, and a checkout flow that makes ordering feel effortless on desktop and mobile.</p>
+            <div class="feature-icon" style="margin-top:18px;">⭐</div>
+            <p><strong>“Fast, easy, and seriously good pizza.”</strong><br /><span class="muted">A sample review section to build trust.</span></p>
+          </article>
+          <article class="contact-card">
+            <h3>Need help with an order?</h3>
+            <p>Customers can call for delivery updates, allergy questions, or large group orders.</p>
+            <a href="tel:01244555980" class="btn btn-primary" style="display:inline-block; margin-top:14px;">Call now</a>
+            <a href="mailto:orders@chesterpizza.co.uk" class="btn btn-secondary" style="display:inline-block; margin-top:10px;">Email us</a>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-card">
+      <div>
+        <h3 style="margin-bottom:8px;">Chester Pizza</h3>
+        <p>Modern pizza ordering made simple. Fresh slices, clean design, and a checkout flow built to get more orders.</p>
+      </div>
+      <div class="mini-links">
+        <a href="#home">Home</a>
+        <a href="#menu">Menu</a>
+        <a href="#contact">Contact</a>
+        <a href="#checkout">Checkout</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    function createFoodFallback(title, emoji, subtitle, bg, fg) {
+      const safeTitle = String(title).replace(/[&<>]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[ch]));
+      const safeSubtitle = String(subtitle).replace(/[&<>]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[ch]));
+      const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">'
+        + '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">'
+        + '<stop offset="0%" stop-color="' + bg + '"/>'
+        + '<stop offset="100%" stop-color="#ffffff"/>'
+        + '</linearGradient></defs>'
+        + '<rect width="1200" height="800" rx="34" fill="url(#g)"/>'
+        + '<circle cx="600" cy="280" r="150" fill="#ffffff" opacity="0.96"/>'
+        + '<text x="600" y="335" text-anchor="middle" font-size="124">' + emoji + '</text>'
+        + '<text x="600" y="520" text-anchor="middle" font-size="58" font-family="Arial, sans-serif" font-weight="700" fill="' + fg + '">' + safeTitle + '</text>'
+        + '<text x="600" y="585" text-anchor="middle" font-size="30" font-family="Arial, sans-serif" fill="' + fg + '" opacity="0.78">' + safeSubtitle + '</text>'
+        + '</svg>';
+      return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+    }
+
+    const imageFallbacks = {
+      1: createFoodFallback('Margherita', '🍕', 'Classic cheese pizza', '#fff7ed', '#9a3412'),
+      2: createFoodFallback('Pepperoni', '🍕', 'Spicy pepperoni pizza', '#fff1f2', '#9f1239'),
+      3: createFoodFallback('Veggie', '🍕', 'Loaded veggie pizza', '#f0fdf4', '#166534'),
+      4: createFoodFallback('BBQ Chicken', '🍕', 'BBQ chicken pizza', '#fff7ed', '#7c2d12'),
+      5: createFoodFallback('Cheese Burst', '🧀', 'Extra cheese pizza', '#fefce8', '#a16207'),
+      6: createFoodFallback('Farmhouse', '🍕', 'Farm fresh toppings', '#f7fee7', '#3f6212'),
+      7: createFoodFallback('Chicken strips', '🍗', 'Tender, juicy strips', '#fff7ed', '#9a3412'),
+      8: createFoodFallback('Cheese bites', '🧀', 'Round fried cheese balls', '#fffbea', '#92400e'),
+      9: createFoodFallback('Mozzarella sticks', '🧀', 'Crispy mozzarella sticks', '#fff7ed', '#7c2d12'),
+      10: createFoodFallback('Garlic Bread', '🥖', 'Garlic butter bread', '#fffbeb', '#92400e'),
+      11: createFoodFallback('Salad', '🥗', 'Fresh salad greens', '#ecfdf5', '#166534'),
+      12: createFoodFallback('Coke', '🥤', 'Coca-Cola can', '#fef2f2', '#991b1b'),
+      13: createFoodFallback('7up', '🥤', '7UP can', '#f0fdf4', '#166534'),
+      14: createFoodFallback('Corona Beer', '🍺', 'Beer bottle', '#fffbeb', '#92400e'),
+      15: createFoodFallback('Lemonade', '🍋', 'Fresh lemonade', '#fefce8', '#a16207'),
+      16: createFoodFallback('Still Water', '💧', 'Water bottle', '#eff6ff', '#1d4ed8')
+    };
+
+    const products = [
+      { id: 1, name: 'Margherita', price: 8.99, rating: 4.8, category: 'pizza', image: 'https://images.pexels.com/photos/905847/pexels-photo-905847.jpeg?auto=compress&cs=tinysrgb&w=1200', fallback: imageFallbacks[1], desc: 'Classic cheese pizza', tags: ['Classic', 'Cheesy', 'Popular'] },
+      { id: 2, name: 'Pepperoni', price: 9.99, rating: 4.9, category: 'pizza', image: 'https://images.pexels.com/photos/4109084/pexels-photo-4109084.jpeg?auto=compress&cs=tinysrgb&w=1200', fallback: imageFallbacks[2], desc: 'Spicy pepperoni pizza', tags: ['Spicy', 'Best seller', 'Loaded'] },
+      { id: 3, name: 'Veggie', price: 10.50, rating: 4.7, category: 'pizza', image: 'https://images.unsplash.com/photo-1511689660979-10d2b1aada49?auto=format&fit=crop&w=1200&q=80', fallback: imageFallbacks[3], desc: 'Loaded veggie pizza', tags: ['Veggie', 'Fresh', 'Colourful'] },
+      { id: 4, name: 'BBQ Chicken', price: 10.50, rating: 4.8, category: 'pizza', image: 'https://images.pexels.com/photos/2619967/pexels-photo-2619967.jpeg?auto=compress&cs=tinysrgb&w=1200', fallback: imageFallbacks[4], desc: 'BBQ chicken pizza', tags: ['BBQ', 'Chicken', 'Smoky'] },
+      { id: 5, name: 'Cheese Burst', price: 10.00, rating: 4.8, category: 'pizza', image: 'https://images.pexels.com/photos/2147491/pexels-photo-2147491.jpeg?auto=compress&cs=tinysrgb&w=1200', fallback: imageFallbacks[5], desc: 'Extra cheese pizza', tags: ['Extra cheese', 'Rich', 'Creamy'] },
+      { id: 6, name: 'Farmhouse', price: 10.80, rating: 4.7, category: 'pizza', image: 'https://images.pexels.com/photos/825661/pexels-photo-825661.jpeg?auto=compress&cs=tinysrgb&w=1200', fallback: imageFallbacks[6], desc: 'Farm fresh toppings', tags: ['Fresh', 'Loaded', 'House favorite'] },
+      { id: 7, name: 'Chicken strips', price: 2.50, rating: 4.6, category: 'sides', image: 'https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=1200&q=80', fallback: imageFallbacks[7], desc: 'Tender, juicy strips', tags: ['Tender', 'Juicy', 'Side'] },
+      { id: 8, name: 'Cheese bites', price: 2.80, rating: 4.7, category: 'sides', image: 'https://images.pexels.com/photos/4518843/pexels-photo-4518843.jpeg?auto=compress&cs=tinysrgb&w=1200', fallback: imageFallbacks[8], desc: 'Round fried cheese balls', tags: ['Crispy', 'Cheesy', 'Balls'] },
+      { id: 9, name: 'Mozzarella sticks', price: 3.20, rating: 4.8, category: 'sides', image: 'https://images.unsplash.com/photo-1548340748-6d2b7d7da280?auto=format&fit=crop&w=1200&q=80', fallback: imageFallbacks[9], desc: 'Crispy mozzarella sticks', tags: ['Mozzarella', 'Crispy', 'Melty'] },
+      { id: 10, name: 'Garlic Bread', price: 2.30, rating: 4.7, category: 'sides', image: 'https://images.pexels.com/photos/1639562/pexels-photo-1639562.jpeg?auto=compress&cs=tinysrgb&w=1200', fallback: imageFallbacks[10], desc: 'Garlic butter bread', tags: ['Garlic', 'Toasted', 'Classic'] },
+      { id: 11, name: 'Salad', price: 3.80, rating: 4.5, category: 'sides', image: 'https://images.pexels.com/photos/1213710/pexels-photo-1213710.jpeg?auto=compress&cs=tinysrgb&w=1200', fallback: imageFallbacks[11], desc: 'Fresh salad greens', tags: ['Fresh', 'Light', 'Greens'] },
+      { id: 12, name: 'Coke', price: 2.00, rating: 4.8, category: 'drinks', image: 'https://images.pexels.com/photos/2775860/pexels-photo-2775860.jpeg?auto=compress&cs=tinysrgb&w=1200', fallback: imageFallbacks[12], desc: 'Coca-Cola glass with ice', tags: ['Cold', 'Classic'] },
+      { id: 13, name: '7up', price: 1.50, rating: 4.6, category: 'drinks', image: 'https://images.unsplash.com/photo-1624517452488-04869289c4ca?auto=format&fit=crop&w=1200&q=80', fallback: imageFallbacks[13], desc: '7UP can with lemon', tags: ['Lemon', 'Sparkling'] },
+      { id: 14, name: 'Corona Beer', price: 1.80, rating: 4.6, category: 'drinks', image: 'https://images.pexels.com/photos/1552630/pexels-photo-1552630.jpeg?auto=compress&cs=tinysrgb&w=1200', fallback: imageFallbacks[14], desc: 'Cold beer bottle with lime', tags: ['Beer', 'Cold'] },
+      { id: 15, name: 'Lemonade', price: 1.20, rating: 4.5, category: 'drinks', image: 'https://images.pexels.com/photos/96974/pexels-photo-96974.jpeg?auto=compress&cs=tinysrgb&w=1200', fallback: imageFallbacks[15], desc: 'Fresh lemonade glass', tags: ['Refreshing'] },
+      { id: 16, name: 'Still Water', price: 1.60, rating: 4.4, category: 'drinks', image: 'https://images.pexels.com/photos/327090/pexels-photo-327090.jpeg?auto=compress&cs=tinysrgb&w=1200', fallback: imageFallbacks[16], desc: 'Clear bottled water', tags: ['Water'] }
+    ];
+
+    const cart = [];
+    let currentCategory = 'pizza';
+
+    const menuGrid = document.getElementById('menu-grid');
+    const cartItems = document.getElementById('cart-items');
+    const checkoutList = document.getElementById('checkout-list');
+    const cartCount = document.getElementById('cart-count');
+    const cartBadge = document.getElementById('cart-badge');
+    const subtotalEl = document.getElementById('subtotal');
+    const totalEl = document.getElementById('total');
+    const checkoutSubtotalEl = document.getElementById('checkout-subtotal');
+    const checkoutTotalEl = document.getElementById('checkout-total');
+    const clearCartBtn = document.getElementById('clear-cart');
+    const checkoutForm = document.getElementById('checkout-form');
+    const successBox = document.getElementById('checkout-success');
+    const toast = document.getElementById('toast');
+    const categoryLabel = document.getElementById('category-label');
+    const categoryTabs = document.querySelectorAll('.tab');
+    const deliveryFee = 2.5;
+
+    function money(value) {
+      return '£' + Number(value).toFixed(2);
+    }
+
+    function toastMessage(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+    }
+
+    function titleCase(text) {
+      return text.charAt(0).toUpperCase() + text.slice(1);
+    }
+
+    function attachImageFallbacks() {
+      const images = menuGrid.querySelectorAll('img[data-fallback]');
+      images.forEach((img) => {
+        img.addEventListener('error', () => {
+          if (img.dataset.fallbackApplied === 'true') return;
+          img.dataset.fallbackApplied = 'true';
+          img.src = img.dataset.fallback;
+        }, { once: true });
+      });
+    }
+
+    function renderMenu() {
+      const filtered = products.filter((product) => product.category === currentCategory);
+      categoryLabel.textContent = 'Showing: ' + titleCase(currentCategory);
+
+      menuGrid.innerHTML = filtered.map((product) => {
+        const isPizza = product.category === 'pizza';
+        return `
+          <article class="menu-card">
+            <img src="${product.image}" alt="${product.name}" loading="lazy" data-fallback="${product.fallback}" />
+            <div class="menu-body">
+              <div class="menu-top">
+                <div>
+                  <h3>${product.name}</h3>
+                  <p class="menu-meta">${product.desc}</p>
+                </div>
+                <div class="price">${money(product.price)}</div>
+              </div>
+
+              ${isPizza ? `
+                <div class="size-row">
+                  <label for="size-${product.id}" style="font-weight:700; font-size:0.95rem;">Size</label>
+                  <select id="size-${product.id}" class="size-select">
+                    <option value="small">Small</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="large">Large</option>
+                  </select>
+                </div>
+                <p class="menu-meta">Small -£2.00 • Medium base price • Large +£3.00</p>
+              ` : ''}
+
+              <div class="menu-tags">
+                ${product.tags.map((tag) => `<span class="tag">${tag}</span>`).join('')}
+              </div>
+
+              <div class="menu-actions">
+                <span class="rating">⭐ ${product.rating}</span>
+                <button class="btn btn-primary" onclick="addToCart(${product.id})">Add to cart</button>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      attachImageFallbacks();
+    }
+
+    function addToCart(id) {
+      const product = products.find((item) => item.id === id);
+      if (!product) return;
+
+      let size = 'standard';
+      let price = product.price;
+      let name = product.name;
+
+      if (product.category === 'pizza') {
+        const sizeSelect = document.getElementById('size-' + id);
+        size = sizeSelect ? sizeSelect.value : 'medium';
+        if (size === 'small') price = Math.max(0, product.price - 2);
+        if (size === 'large') price = product.price + 3;
+        name = product.name + ' (' + size + ')';
+      }
+
+      const cartKey = id + '-' + size;
+      const existing = cart.find((item) => item.cartKey === cartKey);
+
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ ...product, name, price, qty: 1, cartKey });
+      }
+
+      renderCart();
+      toastMessage('Added to cart');
+    }
+
+    function updateQty(cartKey, change) {
+      const item = cart.find((entry) => entry.cartKey === cartKey);
+      if (!item) return;
+      item.qty += change;
+      if (item.qty <= 0) {
+        const index = cart.findIndex((entry) => entry.cartKey === cartKey);
+        cart.splice(index, 1);
+      }
+      renderCart();
+    }
+
+    function clearCart() {
+      cart.length = 0;
+      renderCart();
+      toastMessage('Cart cleared');
+    }
+
+    function renderCart() {
+      const count = cart.reduce((sum, item) => sum + item.qty, 0);
+      const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      const total = subtotal + deliveryFee;
+
+      cartCount.textContent = count + ' ' + (count === 1 ? 'item' : 'items');
+      cartBadge.textContent = count + ' ' + (count === 1 ? 'item' : 'items');
+      subtotalEl.textContent = money(subtotal);
+      totalEl.textContent = money(total);
+      checkoutSubtotalEl.textContent = money(subtotal);
+      checkoutTotalEl.textContent = money(total);
+
+      if (cart.length === 0) {
+        cartItems.innerHTML = '<div class="empty-state">Your cart is empty. Add a few items to get started.</div>';
+        checkoutList.innerHTML = '<div class="empty-state">No items yet. Your selected items will appear here.</div>';
+        return;
+      }
+
+      cartItems.innerHTML = cart.map((item) => `
+        <div class="cart-item">
+          <div>
+            <h4>${item.name}</h4>
+            <div class="muted">${money(item.price)} each</div>
+            <div class="qty-controls">
+              <button class="qty-btn" onclick="updateQty('${item.cartKey}', -1)">−</button>
+              <strong>${item.qty}</strong>
+              <button class="qty-btn" onclick="updateQty('${item.cartKey}', 1)">+</button>
+            </div>
+          </div>
+          <strong>${money(item.price * item.qty)}</strong>
+        </div>
+      `).join('');
+
+      checkoutList.innerHTML = cart.map((item) => `
+        <div class="checkout-item">
+          <div>
+            <strong>${item.name}</strong><br />
+            <span class="muted">Qty ${item.qty} × ${money(item.price)}</span>
+          </div>
+          <strong>${money(item.price * item.qty)}</strong>
+        </div>
+      `).join('');
+    }
+
+    clearCartBtn.addEventListener('click', clearCart);
+
+    categoryTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        currentCategory = tab.dataset.category;
+        categoryTabs.forEach((item) => item.classList.remove('active'));
+        tab.classList.add('active');
+        renderMenu();
+      });
+    });
+
+    checkoutForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (cart.length === 0) {
+        successBox.style.display = 'block';
+        successBox.style.background = '#fff4e6';
+        successBox.style.borderColor = '#f3d4a6';
+        successBox.style.color = '#9a6700';
+        successBox.textContent = 'Add at least one item before placing your order.';
+        return;
+      }
+
+      const formData = new FormData(checkoutForm);
+      const customerName = formData.get('name');
+      const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0) + deliveryFee;
+
+      successBox.style.display = 'block';
+      successBox.style.background = '#edf9f4';
+      successBox.style.borderColor = '#bde5d1';
+      successBox.style.color = 'var(--success)';
+      successBox.textContent = 'Thanks, ' + customerName + '! Your order for ' + money(total) + ' has been received. We\'ll call shortly to confirm delivery.';
+      checkoutForm.reset();
+      cart.length = 0;
+      renderCart();
+      successBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      toastMessage('Order placed successfully');
+    });
+
+    function runSelfChecks() {
+      console.assert(Boolean(imageFallbacks[1]), 'Fallback for Margherita should exist');
+      console.assert(products.length === 16, 'Expected 16 menu items');
+      console.assert(products.every((item) => typeof item.fallback === 'string' && item.fallback.length > 0), 'Every product should have a string fallback');
+      console.assert(products.filter((item) => item.category === 'pizza').length === 6, 'Expected 6 pizzas');
+      console.assert(products.filter((item) => item.category === 'sides').length === 5, 'Expected 5 sides');
+      console.assert(products.filter((item) => item.category === 'drinks').length === 5, 'Expected 5 drinks');
+      console.assert(money(2) === '£2.00', 'Money formatting should work');
+      console.assert(typeof createFoodFallback('Test', '🍕', 'x', '#fff', '#000') === 'string', 'Fallback generator should return a string');
+    }
+
+    runSelfChecks();
+    renderMenu();
+    renderCart();
+
+    window.addToCart = addToCart;
+    window.updateQty = updateQty;
+  </script>
+</body>
+</html>
